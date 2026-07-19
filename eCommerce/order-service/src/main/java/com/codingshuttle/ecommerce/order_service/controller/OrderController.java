@@ -20,6 +20,12 @@ public class OrderController
 {
     private final OrderService orderService;
 
+    @GetMapping("/hello")
+    public String dummyApi()
+    {
+        return "Hello Dummy from Order Service  ! ";
+    }
+
     @GetMapping
     public ResponseEntity<List<OrdersDTO>> getAllOrders(HttpServletRequest httpServletRequest)
     {
