@@ -22,6 +22,6 @@ public class OrdersEntity
     private Double totalPrice;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items;
+    private List<OrderItemEntity> items;
 
 }

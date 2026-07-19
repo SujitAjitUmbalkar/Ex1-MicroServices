@@ -11,7 +11,7 @@ INSERT INTO orders_entity (total_price, order_status) VALUES
 (250.40, 'CANCEL');
 
 -- Inserting order items, ensuring each order has items
-INSERT INTO order_item (order_id, product_id, quantity) VALUES
+INSERT INTO order_item_entity (order_id, product_id, quantity) VALUES
 (1, 101, 2),
 (1, 102, 1),
 (2, 103, 1),

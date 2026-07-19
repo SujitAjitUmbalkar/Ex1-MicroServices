@@ -1,5 +1,5 @@
 package com.codingshuttle.ecommerce.order_service.controller;
-import com.codingshuttle.ecommerce.order_service.dto.OrderRequestDTO;
+import com.codingshuttle.ecommerce.order_service.dto.OrdersDTO;
 import com.codingshuttle.ecommerce.order_service.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,18 +22,18 @@ public class OrderController
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<OrderRequestDTO>> getAllOrders(HttpServletRequest httpServletRequest)
+    public ResponseEntity<List<OrdersDTO>> getAllOrders(HttpServletRequest httpServletRequest)
     {
         log.info("Fetching all orders via controller");
-        List<OrderRequestDTO> orders = orderService.getAllOrders();
+        List<OrdersDTO> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders); // Returns 200 OK with the list of orders
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderRequestDTO> getOrderById(@PathVariable Long id)
+    public ResponseEntity<OrdersDTO> getOrderById(@PathVariable Long id)
     {
         log.info("Fetching order with ID: {} via controller", id);
-        OrderRequestDTO order = orderService.getOrderById(id);
+        OrdersDTO order = orderService.getOrderById(id);
         return ResponseEntity.ok(order); // Returns 200 OK with the order
     }
 }
