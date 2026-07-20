@@ -1,5 +1,6 @@
 package com.codingshuttle.ecommerce.inventory_service.controller;
 
+import com.codingshuttle.ecommerce.inventory_service.clients.OrdersFeignClient;
 import com.codingshuttle.ecommerce.inventory_service.dto.ProductDTO;
 import com.codingshuttle.ecommerce.inventory_service.entity.Product;
 import com.codingshuttle.ecommerce.inventory_service.service.ProductService;
@@ -24,18 +25,20 @@ public class ProductController
     private final ProductService productService;
     private final DiscoveryClient discoveryClient; //  import from cloud
     private final RestClient restClient;        // to make 3rd part api calls , and fetch apis
+//    OR
+    private final OrdersFeignClient ordersFeignClient;
 
     @GetMapping("/fetchorders")
     public String fetchOrderService()
     {
-        ServiceInstance orderService = discoveryClient.getInstances("order-service").getFirst();
+//        ServiceInstance orderService = discoveryClient.getInstances("order-service").getFirst();
+//
+//        String response = restClient.get()
+//                .uri(orderService.getUri()+"/api/v1/orders/hello")
+//                .retrieve()
+//                .body(String.class);
 
-        String response = restClient.get()
-                .uri(orderService.getUri()+"/api/v1/orders/hello")
-                .retrieve()
-                .body(String.class);
-
-        return response;
+        return ordersFeignClient.hello();
     }
 
     @GetMapping
