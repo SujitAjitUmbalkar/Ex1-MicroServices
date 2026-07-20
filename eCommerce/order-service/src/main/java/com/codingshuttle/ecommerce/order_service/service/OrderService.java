@@ -6,6 +6,7 @@ import com.codingshuttle.ecommerce.order_service.entity.OrderItemEntity;
 import com.codingshuttle.ecommerce.order_service.entity.OrderStatus;
 import com.codingshuttle.ecommerce.order_service.entity.OrdersEntity;
 import com.codingshuttle.ecommerce.order_service.repository.OrdersRepository;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,7 @@ public class OrderService
     }
 
     @Retry(name = "inventoryRetry" , fallbackMethod = "createOrderFallback")
+    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequestDTO createOrder(OrderRequestDTO order)
     {
         log.info("Calling createOrder()");
