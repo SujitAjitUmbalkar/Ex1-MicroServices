@@ -1,12 +1,11 @@
-package com.codingshuttle.ecommerce.order_service.dto;
+package com.codingshuttle.ecommerce.inventory_service.dto;
 
 import lombok.Data;
 
 @Data
-public class OrderItemDTO
+public class OrderRequestItemDTO
 {
     private Long id;
     private Long productId;
     private Integer quantity;
-
 }

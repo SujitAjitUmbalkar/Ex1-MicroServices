@@ -1,5 +1,7 @@
 package com.codingshuttle.ecommerce.inventory_service.service;
 
+import com.codingshuttle.ecommerce.inventory_service.dto.OrderRequestDTO;
+import com.codingshuttle.ecommerce.inventory_service.dto.OrderRequestItemDTO;
 import com.codingshuttle.ecommerce.inventory_service.dto.ProductDTO;
 import com.codingshuttle.ecommerce.inventory_service.entity.Product;
 import com.codingshuttle.ecommerce.inventory_service.repository.ProductRepository;
@@ -38,4 +40,33 @@ public class ProductService
                 .orElseThrow(()-> new RuntimeException("Not Found !"));
     }
 
+    public Double reduceStock(OrderRequestDTO orderRequestDTO)
+    {
+        Double totalPrice = 0.0;
+
+        for(OrderRequestItemDTO orderRequestItemDTO : orderRequestDTO.getItems())
+        {
+            Integer quantity = orderRequestItemDTO.getQuantity();
+            Long productId = orderRequestItemDTO.getProductId();
+
+//            check if the product exists in db
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(()-> new RuntimeException("Product Not Found with id "+productId));
+
+//            check if stock is not sufficient
+            if(quantity > product.getStock())
+            {
+                throw new RuntimeException("Stock Exceeded");
+            }
+
+//            reduce stock
+            product.setStock(product.getStock()-quantity);
+            productRepository.save(product);
+
+//            calculate price
+            totalPrice = totalPrice + quantity*product.getPrice();
+
+        }
+        return   totalPrice;
+    }
 }

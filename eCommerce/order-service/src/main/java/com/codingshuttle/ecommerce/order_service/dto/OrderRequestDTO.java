@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class OrdersDTO
+public class OrderRequestDTO
 {
     private Long id;
-    private List<OrderItemDTO> items;
-    private BigDecimal totalPrice;
+    private List<OrderRequestItemDTO> items;
+    private Double totalPrice;
 
 }
