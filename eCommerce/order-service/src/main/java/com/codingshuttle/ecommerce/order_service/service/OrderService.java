@@ -6,6 +6,7 @@ import com.codingshuttle.ecommerce.order_service.entity.OrderItemEntity;
 import com.codingshuttle.ecommerce.order_service.entity.OrderStatus;
 import com.codingshuttle.ecommerce.order_service.entity.OrdersEntity;
 import com.codingshuttle.ecommerce.order_service.repository.OrdersRepository;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -43,30 +44,31 @@ public class OrderService
         return modelMapper.map(ordersEntity, OrderRequestDTO.class);
     }
 
+    @Retry(name = "inventoryRetry" , fallbackMethod = "createOrderFallback")
     public OrderRequestDTO createOrder(OrderRequestDTO order)
     {
-        log.info("createOrder()");
+        log.info("Calling createOrder()");
 
-//        reduce stock & calculate price
         Double totalPrice = inventoryOpenFeignClient.reduceStocks(order);
 
-//        Entity conversion
         OrdersEntity ordersEntity = modelMapper.map(order, OrdersEntity.class);
 
-//   for each item , set single order
         for(OrderItemEntity orderItemEntity : ordersEntity.getItems())
         {
             orderItemEntity.setOrder(ordersEntity);
         }
 
-//      set orders price and status
         ordersEntity.setTotalPrice(totalPrice);
         ordersEntity.setOrderStatus(OrderStatus.CONFIRMED);
 
-//        save entity
         OrdersEntity savedOrder =  ordersRepository.save(ordersEntity);
 
-//        return order
         return modelMapper.map(savedOrder, OrderRequestDTO.class);
+    }
+
+    public OrderRequestDTO createOrderFallback(OrderRequestDTO order, Throwable throwable)
+    {
+        log.info("Fallback occurred due to : {} , hence returning null DTO ", throwable.getMessage());
+        return new OrderRequestDTO();
     }
 }
