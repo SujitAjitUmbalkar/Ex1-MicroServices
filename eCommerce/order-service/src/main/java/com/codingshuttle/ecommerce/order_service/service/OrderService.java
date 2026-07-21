@@ -6,6 +6,7 @@ import com.codingshuttle.ecommerce.order_service.entity.OrderItemEntity;
 import com.codingshuttle.ecommerce.order_service.entity.OrderStatus;
 import com.codingshuttle.ecommerce.order_service.entity.OrdersEntity;
 import com.codingshuttle.ecommerce.order_service.repository.OrdersRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +46,9 @@ public class OrderService
         return modelMapper.map(ordersEntity, OrderRequestDTO.class);
     }
 
-    @Retry(name = "inventoryRetry" , fallbackMethod = "createOrderFallback")
-    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
+//    @Retry(name = "inventoryRetry" , fallbackMethod = "createOrderFallback")
+    @CircuitBreaker(name = "inventoryCircuitBreaker", fallbackMethod = "createOrderFallback")
+//    @RateLimiter(name = "inventoryRateLimiter", fallbackMethod = "createOrderFallback")
     public OrderRequestDTO createOrder(OrderRequestDTO order)
     {
         log.info("Calling createOrder()");
