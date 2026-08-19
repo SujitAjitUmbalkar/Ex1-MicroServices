@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          password: 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

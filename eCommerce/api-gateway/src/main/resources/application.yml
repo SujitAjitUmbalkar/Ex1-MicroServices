@@ -2,21 +2,8 @@ spring:
   application:
     name: api-gateway
 
-  cloud:
-    gateway:
-      server:
-        webflux:
-          routes:
-
-            - id: inventory-service
-              uri: lb://INVENTORY-SERVICE
-              predicates:
-                - Path=/api/v1/products/**
-
-            - id: order-service
-              uri: lb://ORDER-SERVICE
-              predicates:
-                - Path=/api/v1/orders/**
+  config:
+    import: optional:configserver:http://localhost:8888
 
 eureka:
   client:
