@@ -1,6 +1,7 @@
 package com.codingshuttle.ecommerce.inventory_service.controller;
 
 import com.codingshuttle.ecommerce.inventory_service.clients.OrdersFeignClient;
+import com.codingshuttle.ecommerce.inventory_service.config.FeaturesEnablesConfig;
 import com.codingshuttle.ecommerce.inventory_service.dto.OrderRequestDTO;
 import com.codingshuttle.ecommerce.inventory_service.dto.ProductDTO;
 import com.codingshuttle.ecommerce.inventory_service.service.ProductService;
@@ -26,15 +27,23 @@ public class ProductController
     private final DiscoveryClient discoveryClient; //  import from cloud
     private final RestClient restClient;        // to make 3rd part api calls , and fetch apis
     private final OrdersFeignClient ordersFeignClient;
+    private final FeaturesEnablesConfig featuresEnablesConfig;
 
 
     @Value("${my.variable}")
     private String myVariable;
 
     @GetMapping("/config/myvariable")
-    public String printChanges()
+    public String checkFeatures()
     {
-        return "Variable value changed: " + myVariable;
+        if (featuresEnablesConfig.isUserTrackingUnabled())
+        {
+            return "user tracking unabled : " + myVariable;
+        }
+        else
+        {
+            return "user tracking disabled : " + myVariable;
+        }
     }
 
     @GetMapping("/fetchorders")
@@ -68,4 +77,5 @@ public class ProductController
         Double totalPrice = productService.reduceStock(orderRequestDTO);
         return ResponseEntity.ok(totalPrice);
     }
+
 }
