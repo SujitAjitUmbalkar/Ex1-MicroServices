@@ -2,14 +2,13 @@ package com.codingshuttle.ecommerce.inventory_service.controller;
 
 import com.codingshuttle.ecommerce.inventory_service.clients.OrdersFeignClient;
 import com.codingshuttle.ecommerce.inventory_service.dto.OrderRequestDTO;
-import com.codingshuttle.ecommerce.inventory_service.dto.OrderRequestItemDTO;
 import com.codingshuttle.ecommerce.inventory_service.dto.ProductDTO;
-import com.codingshuttle.ecommerce.inventory_service.entity.Product;
 import com.codingshuttle.ecommerce.inventory_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
@@ -20,13 +19,23 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 @Slf4j
+@RefreshScope
 public class ProductController
 {
     private final ProductService productService;
     private final DiscoveryClient discoveryClient; //  import from cloud
     private final RestClient restClient;        // to make 3rd part api calls , and fetch apis
-//    OR
     private final OrdersFeignClient ordersFeignClient;
+
+
+    @Value("${my.variable}")
+    private String myVariable;
+
+    @GetMapping("/config/myvariable")
+    public String printChanges()
+    {
+        return "Variable value changed: " + myVariable;
+    }
 
     @GetMapping("/fetchorders")
     public String fetchOrderService()

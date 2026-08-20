@@ -1,6 +1,5 @@
 package com.codingshuttle.ecommerce.order_service.controller;
 import com.codingshuttle.ecommerce.order_service.dto.OrderRequestDTO;
-import com.codingshuttle.ecommerce.order_service.entity.OrdersEntity;
 import com.codingshuttle.ecommerce.order_service.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

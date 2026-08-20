@@ -3,4 +3,4 @@ spring:
     config:
       server:
         git:
-          password: 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
+          password: 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
