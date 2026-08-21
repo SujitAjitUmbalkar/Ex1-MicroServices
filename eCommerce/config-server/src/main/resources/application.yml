@@ -6,8 +6,8 @@ spring:
       server:
         git:
           uri: https://github.com/SujitAjitUmbalkar/eCommerce-config-server
-          username: SujitAjitUmbalkar
-          password : ${GITHUB_TOKEN}
+#          username: SujitAjitUmbalkar
+#          password : ${GITHUB_TOKEN}
   profiles:
     active: local
 

@@ -39,7 +39,7 @@ public class OrderController
         return ResponseEntity.ok(order); // Returns 200 OK with the order
     }
 
-    @PostMapping("create-order")
+    @PostMapping("/create-order")
     public ResponseEntity<OrderRequestDTO> createOrder(@RequestBody OrderRequestDTO order)
     {
         OrderRequestDTO orders = orderService.createOrder(order);
