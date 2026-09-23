@@ -75,4 +75,33 @@ public class OrderService
         log.info("Fallback occurred due to : {} , hence returning null DTO ", throwable.getMessage());
         return new OrderRequestDTO();
     }
+
+    public String cancelOrderById(Long orderId)
+    {
+//        1. Find the order
+        OrdersEntity order = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("No orders found with id "+ orderId));
+
+//        2. Check Order Status
+            if(order.getOrderStatus().equals(OrderStatus.CANCELED) )
+        {
+            throw new RuntimeException("Order is canceled already ! No need to cancel again ..");
+        }
+            if(order.getOrderStatus().equals(OrderStatus.DELIVERED) )
+            {
+                throw new RuntimeException("Order has delivered  , you cannot cancel this order");
+            }
+
+//            convert Entity -> DTO and call inventory service to restock the stock
+                OrderRequestDTO orderRequestDTO = modelMapper.map(order, OrderRequestDTO.class);
+
+               String response =  inventoryOpenFeignClient.restockStock(orderRequestDTO);
+
+//                set order Status as CANCELLED
+                order.setOrderStatus(OrderStatus.CANCELED);
+                ordersRepository.save(order);
+
+                return response;
+
+    }
 }

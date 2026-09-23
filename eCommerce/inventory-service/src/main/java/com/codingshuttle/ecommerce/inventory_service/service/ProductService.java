@@ -69,4 +69,25 @@ public class ProductService
         }
         return   totalPrice;
     }
+
+    public String restockStock(OrderRequestDTO orderRequestDTO)
+    {
+//       1. get order items one by one
+        for(OrderRequestItemDTO item : orderRequestDTO.getItems())
+        {
+//          2.  now find that product
+            Product product = productRepository.findById(item.getProductId())
+                    .orElseThrow(()-> new RuntimeException("Product Not Found with id , cannot restock "+item.getProductId()));
+
+//            3. now find available stock of product and add stock in it
+            Integer quantity = product.getStock();
+            product.setStock(quantity + item.getQuantity());
+
+//            4.save that product by adding stock in it
+            productRepository.save(product);
+        }
+
+        return " order Cancelled , Your money will be refunded after some time ";
+
+    }
 }

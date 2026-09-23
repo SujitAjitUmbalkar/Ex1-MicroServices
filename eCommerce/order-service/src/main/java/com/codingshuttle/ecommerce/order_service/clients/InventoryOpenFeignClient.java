@@ -12,6 +12,8 @@ public interface InventoryOpenFeignClient
     @PutMapping("/products/reduce-stock")
     Double reduceStocks(@RequestBody OrderRequestDTO orderRequestDTO);
 
+    @PutMapping("/products/restock-stock")
+    String restockStock(@RequestBody OrderRequestDTO orderRequestDTO);
 
 
 }
