@@ -1,7 +1,7 @@
 package com.codingshuttle.ecommerce.order_service.clients;
 
 
-import com.codingshuttle.ecommerce.order_service.dto.OrderRequestDTO;
+import com.codingshuttle.ecommerce.order_service.dto.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
